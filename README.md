@@ -117,7 +117,7 @@ vibecall/
     [vite.config.js](http://_vscodecontentref_/7)
 ```
 
-##Acknowledgements
+## Acknowledgements
 -Stream Chat & Video
 -Tailwind CSS
 -DaisyUI
