@@ -118,7 +118,7 @@ vibecall/
 ```
 
 ## Acknowledgements
-- **Stream Chat & Video
-- **Tailwind CSS
-- **DaisyUI
-- *Lucide Icons
+- Stream Chat & Video
+- Tailwind CSS
+- DaisyUI
+- Lucide Icons
