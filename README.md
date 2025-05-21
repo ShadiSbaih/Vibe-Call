@@ -2,7 +2,7 @@
 
 VibeCall is a full-stack web application that connects language learners for real-time chat and video calls. Users can sign up, complete onboarding, find language partners, send and accept friend requests, and communicate via messaging or video using an intuitive React frontend and a Node.js/Express backend.
 
---- [View The Full Documentation Here](https://deepwiki.com/ShadiSbaih/Vibe-Call)<a href="https://deepwiki.com/ShadiSbaih/Vibe-Call"><img src="https://deepwiki.com/badge.svg" alt="Ask DeepWiki"></a>
+--- [View The Full Documentation Here](https://deepwiki.com/ShadiSbaih/Vibe-Call)<a href="https://deepwiki.com/ShadiSbaih/Vibe-Call"><img src="https://deepwiki.com/badge.svg" alt="Ask DeepWiki">View The Full Documentation Here</a>
 
 ## Features
 
