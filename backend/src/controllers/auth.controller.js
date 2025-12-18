@@ -61,8 +61,10 @@ export async function signUp(req, res) {
     res.cookie("jwt", token, {
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       httpOnly: true, //Prevents XSS attacks by not allowing client-side JavaScript to access the cookie
-      sameSite: "strict", // CSRF protection
-      secure: process.env.NODE_ENV === "production", // Only send cookie over HTTPS in production
+      // When frontend and backend are on different domains, cookies must be sent cross-site.
+      // That requires SameSite=None + Secure (modern browsers block cross-site cookies otherwise).
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+      secure: process.env.NODE_ENV === "production", // HTTPS only in production
     });
 
     return res.status(201).json({ success: true, user: newUser, message: "User created successfully" });
@@ -99,8 +101,8 @@ export async function login(req, res) {
     res.cookie("jwt", token, {
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       httpOnly: true, //Prevents XSS attacks by not allowing client-side JavaScript to access the cookie
-      sameSite: "strict", // CSRF protection
-      secure: process.env.NODE_ENV === "production", // Only send cookie over HTTPS in production
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+      secure: process.env.NODE_ENV === "production", // HTTPS only in production
     });
 
     res.status(200).json({ success: true, message: "User Logged In Successfully!", user })
@@ -112,7 +114,12 @@ export async function login(req, res) {
 }
 
 export async function logout(req, res) {
-  res.clearCookie("jwt");
+  // Must match cookie attributes to reliably clear it in browsers.
+  res.clearCookie("jwt", {
+    httpOnly: true,
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+    secure: process.env.NODE_ENV === "production",
+  });
   res.status(200).json({ success: true, message: "Logged out successfully" });
 }
 
@@ -156,7 +163,7 @@ export async function onboard(req, res) {
       console.error("Error updating Stream user after boarding :", error.message);
       return res.status(500).json({ message: "Internal server Error => updating Stream user after boarding" });
     }
-   
+
     res.status(200).json({ success: true, user: updatedUser, message: "User onboarded successfully" });
   } catch (error) {
     console.error("Error in onboarding:", error);
