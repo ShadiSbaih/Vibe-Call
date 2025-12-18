@@ -9,6 +9,7 @@ import authRoutes from "./routes/auth.route.js";
 import userRoutes from "./routes/user.route.js";
 import chatRoutes from "./routes/chat.route.js";
 import path from "path";
+import fs from "fs";
 import keepAliveJob from "./lib/keepAliveJob.js";
 
 import { connectDB } from "./lib/db.js";
@@ -70,10 +71,17 @@ app.use("/api/users", userRoutes);
 app.use("/api/chat", chatRoutes);
 
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../frontend/dist")));
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
-  });
+  const distDir = path.join(__dirname, "../frontend/dist");
+  const indexHtml = path.join(distDir, "index.html");
+
+  // If frontend is deployed separately (Render Static Site), the dist folder won't exist
+  // in this backend service. Only enable static serving when the build output is present.
+  if (fs.existsSync(indexHtml)) {
+    app.use(express.static(distDir));
+    app.get("*", (req, res) => {
+      res.sendFile(indexHtml);
+    });
+  }
 }
 
 app.listen(PORT, () => {
