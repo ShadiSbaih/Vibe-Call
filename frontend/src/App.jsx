@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from "react-router";
+import { Navigate, Route, Routes, useLocation, useNavigate } from "react-router";
 import HomePage from "./pages/HomePage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import SignUpPage from "./pages/SignUpPage.jsx";
@@ -7,6 +7,8 @@ import FriendsPage from "./pages/FriendsPage.jsx";
 import ChatPage from "./pages/ChatPage.jsx";
 import CallPage from "./pages/CallPage.jsx";
 import OnBoardingPage from "./pages/OnBoardingPage.jsx";
+
+import { useEffect } from "react";
 
 import { Toaster } from "react-hot-toast";
 
@@ -28,6 +30,22 @@ const App = () => {
   const isAuthenticated = Boolean(authUser);
 
   const isOnboarded = authUser?.isOnboarded;
+
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // Allow call links that open as '/?call=<id>' to work even if the host
+    // doesn't support SPA rewrites for '/call/:id'.
+    if (!isAuthenticated || !isOnboarded) return;
+    if (location.pathname !== "/") return;
+
+    const params = new URLSearchParams(location.search);
+    const callId = params.get("call");
+    if (!callId) return;
+
+    navigate(`/call/${callId}`, { replace: true });
+  }, [isAuthenticated, isOnboarded, location.pathname, location.search, navigate]);
 
   if (isLoading) {
     return <PageLoader />;

@@ -78,8 +78,8 @@ const ChatPage = () => {
 
   const handleVideoCall = () => {
     if (channel) {
-      // Construct the full URL for initiating or joining a call by appending the channel ID to the current site's origin
-      const callUrl = `${window.location.origin}/call/${channel.id}`;
+      // Use a root URL + query param so direct-open works on hosts without SPA rewrites.
+      const callUrl = `${window.location.origin}/?call=${encodeURIComponent(channel.id)}`;
 
       channel.sendMessage({
         text: `I've started a video call. Join me here: ${callUrl}`,
