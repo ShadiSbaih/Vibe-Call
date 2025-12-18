@@ -1,4 +1,10 @@
-import { Navigate, Route, Routes, useLocation, useNavigate } from "react-router";
+import {
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+  useNavigate,
+} from "react-router";
 import HomePage from "./pages/HomePage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import SignUpPage from "./pages/SignUpPage.jsx";
@@ -45,7 +51,13 @@ const App = () => {
     if (!callId) return;
 
     navigate(`/call/${callId}`, { replace: true });
-  }, [isAuthenticated, isOnboarded, location.pathname, location.search, navigate]);
+  }, [
+    isAuthenticated,
+    isOnboarded,
+    location.pathname,
+    location.search,
+    navigate,
+  ]);
 
   if (isLoading) {
     return <PageLoader />;
